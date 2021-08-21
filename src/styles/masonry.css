@@ -10,18 +10,4 @@
 	background-clip: padding-box;
 }
 
-/* Style your items */
-.my-masonry-grid_column > img {
-	/* change div to reference your elements you put in <Masonry> */
-	background: grey;
-	margin-bottom: 30px;
-	width: 100%;
-	object-fit: cover;
-	border-radius: 16px;
-	opacity: 0.8;
-	transition: opacity 0.3s ease;
-}
 
-.my-masonry-grid_column > img:hover {
-	opacity: 1;
-}

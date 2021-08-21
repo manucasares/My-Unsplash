@@ -2,6 +2,7 @@ import React from 'react';
 import Masonry from 'react-masonry-css';
 
 import { Typography } from 'shared/Typography';
+import { Photo, PhotoContainer, DeleteButton } from './Gallery.elements';
 
 const fakePhotos = [
 	{
@@ -67,12 +68,11 @@ export const Gallery = () => {
 					className="my-masonry-grid"
 					columnClassName="my-masonry-grid_column"
 				>
-					{fakePhotos.map((photo) => (
-						<img
-							key={photo.id}
-							src={photo.src}
-							alt={photo.label}
-						/>
+					{fakePhotos.map(({ id, src, label }) => (
+						<PhotoContainer key={id} data-label={label}>
+							<DeleteButton>delete</DeleteButton>
+							<Photo src={src} />
+						</PhotoContainer>
 					))}
 				</Masonry>
 			)}
