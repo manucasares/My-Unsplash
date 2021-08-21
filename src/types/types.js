@@ -1,5 +1,3 @@
-
-
 export const types = {
-    authLogin: '[AUTH] Login'
-}
+	showAddPhoto: '[UI] Show add photo',
+};

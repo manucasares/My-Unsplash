@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
-export const Navbar_el = styled.section`
+export const NavbarEl = styled.section`
     display: flex;
     flex-direction: column;
     gap: 1.3rem;
+    margin-bottom: 2rem;
 
     @media ${ ( { theme } ) => theme.mediaQueries.above768 } {
         flex-direction: row;
@@ -11,7 +12,6 @@ export const Navbar_el = styled.section`
             margin-left: auto;
         }
     }
-    
 `
 
 export const Logo = styled.img.attrs( () => ({

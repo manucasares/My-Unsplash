@@ -1,19 +1,23 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
-import { Logo, Navbar_el } from './Navbar.elements';
+import { Logo, NavbarEl } from './Navbar.elements';
 import { Button, Input } from 'shared';
-import { AiOutlineSearch } from "react-icons/ai";
-
+import { AiOutlineSearch } from 'react-icons/ai';
+import { showAddPhoto } from 'actions/ui';
 
 export const Navbar = () => {
-    return (
-        <Navbar_el>
-            <Logo />
-            <Input
-                placeholder="Search by name"
-                Icon={ AiOutlineSearch }
-            />
-            <Button> Add a photo </Button>
-        </Navbar_el>
-    )
-}
+	const dispatch = useDispatch();
+
+	const handleOpenAddPhoto = () => {
+		dispatch(showAddPhoto(true));
+	};
+
+	return (
+		<NavbarEl>
+			<Logo />
+			<Input placeholder="Search by name" Icon={AiOutlineSearch} />
+			<Button onClick={handleOpenAddPhoto}> Add a photo </Button>
+		</NavbarEl>
+	);
+};

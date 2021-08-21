@@ -5,6 +5,7 @@ import { GlobalStyles } from 'styles/GlobalStyles';
 import { App } from './App';
 
 import './styles/normalize.min.css';
+import './styles/masonry.css';
 
 ReactDOM.render(
     <>
