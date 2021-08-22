@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const Typography = styled.p.attrs((props) => ({
-	for: props.for || null,
+	htmlFor: props.htmlFor || null,
 }))`
-	display: inline-block;
+	display: block;
 	font-size: ${({ theme, fz }) => fz || theme.fz['300']};
 	font-weight: ${({ fw }) => fw || '500'};
 	color: ${({ theme, color }) => color || theme.colors.dark};

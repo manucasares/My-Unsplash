@@ -4,15 +4,18 @@ export const Overlay = styled.div`
 	position: fixed;
 	inset: 0;
 	background: rgba(0, 0, 0, 0.25);
+	z-index: 1000;
 `;
 
-export const AddWindow = styled.section`
+export const AddWindow = styled.section.attrs((props) => ({
+	className: 'animate__animated annimate__fadeIn',
+}))`
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	width: 70%;
-	padding: 1.5rem;
+	width: min(70%, 600px);
+	padding: 2rem;
 	background: #fff;
 	border-radius: 12px;
 `;

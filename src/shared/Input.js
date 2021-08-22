@@ -15,22 +15,36 @@ const InputContainer = styled.div`
 
 const InputElement = styled.input.attrs((props) => ({
 	placeholder: props.placeholder || '',
+	name: props.name,
+	value: props.value,
+	autoComplete: 'off',
 }))`
 	width: 100%;
 	padding: ${({ Icon }) =>
 		Icon ? '.95rem 1rem .95rem 3.5rem' : '.95rem 1rem'};
 	border-radius: ${({ theme }) => theme.radius.main};
+
 	border: 1px solid
-		${({ theme, borderColor }) => borderColor || theme.colors.light_gray};
+		${({ theme, dark }) => (dark ? theme.colors.dark : theme.colors.light_gray)};
+	color: ${({ theme, dark }) =>
+		dark ? theme.colors.dark : theme.colors.light_gray};
 	outline: none;
-	&,
+
 	&::placeholder {
 		color: ${({ theme }) => theme.colors.light_gray};
 		font-size: ${({ theme }) => theme.fz['200']};
 	}
 `;
 
-export const Input = ({ Icon, placeholder, id, borderColor }) => {
+export const Input = ({
+	Icon,
+	placeholder,
+	id,
+	dark,
+	name,
+	value,
+	onChange,
+}) => {
 	return (
 		<InputContainer>
 			{Icon && <Icon />}
@@ -39,7 +53,10 @@ export const Input = ({ Icon, placeholder, id, borderColor }) => {
 				id={id}
 				placeholder={placeholder}
 				Icon={!!Icon}
-				borderColor={borderColor}
+				dark={!!dark}
+				name={name}
+				value={value}
+				onChange={onChange}
 			/>
 		</InputContainer>
 	);

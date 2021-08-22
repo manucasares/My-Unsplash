@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { useForm } from 'hooks/useForm';
 import { showAddPhoto } from 'actions/ui';
 import { Button, Input } from 'shared';
 import { GrayButton } from 'shared/Button';
@@ -12,18 +13,35 @@ import {
 	InputsContainer,
 	Overlay,
 } from './AddPhoto.elements';
+import { startUploadingPhoto } from 'actions/photos';
+import toast from 'react-hot-toast';
 
 export const AddPhoto = () => {
+	const [{ label, photo_url }, handleInputChange] = useForm({
+		label: 'Paisaje',
+		photo_url:
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png',
+	});
+
 	const dispatch = useDispatch();
 
 	const closeWindow = () => {
 		dispatch(showAddPhoto(false));
 	};
 
+	const uploadPhoto = () => {
+		if (!label.trim() || !photo_url.trim()) {
+			toast.error('There are empty fields.');
+			return;
+		}
+
+		dispatch(startUploadingPhoto(label, photo_url));
+	};
+
 	return (
 		<Overlay>
 			<AddWindow>
-				<Typography fz={theme.fz['500']} color={theme.colors.main}>
+				<Typography fz={theme.fz['400']} color={theme.colors.main}>
 					Add a new photo
 				</Typography>
 
@@ -31,7 +49,7 @@ export const AddPhoto = () => {
 					<div>
 						<Typography
 							as="label"
-							for="input_label"
+							htmlFor="input_label"
 							mb=".5rem"
 							fz={theme.fz['200']}
 						>
@@ -40,14 +58,17 @@ export const AddPhoto = () => {
 						<Input
 							id="input_label"
 							placeholder="Your photo label"
-							borderColor={theme.colors.dark}
+							dark={true}
+							name="label"
+							onChange={handleInputChange}
+							value={label}
 						/>
 					</div>
 
 					<div>
 						<Typography
 							as="label"
-							for="input_url"
+							htmlFor="input_url"
 							mb=".5rem"
 							fz={theme.fz['200']}
 						>
@@ -56,14 +77,17 @@ export const AddPhoto = () => {
 						<Input
 							id="input_url"
 							placeholder="https://images.unsplash.com/photo-1584395630827-860eee694d7b?ixlib=r..."
-							borderColor={theme.colors.dark}
+							dark={true}
+							name="photo_url"
+							onChange={handleInputChange}
+							value={photo_url}
 						/>
 					</div>
 				</InputsContainer>
 
 				<Buttons>
 					<GrayButton onClick={closeWindow}>Cancel</GrayButton>
-					<Button>Submit</Button>
+					<Button onClick={uploadPhoto}>Submit</Button>
 				</Buttons>
 			</AddWindow>
 		</Overlay>

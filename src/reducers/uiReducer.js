@@ -8,6 +8,11 @@ export const uiReducer = (state = {}, action) => {
 				showAddPhoto: action.payload,
 			};
 
+		case types.setLoadingPhotos:
+			return {
+				...state,
+				loading_photos: action.payload,
+			};
 		default:
 			return state;
 	}

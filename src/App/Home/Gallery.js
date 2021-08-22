@@ -1,51 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Masonry from 'react-masonry-css';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
+import { useWindowSize } from 'hooks/useWindowSize';
+import {
+	startDeletingPhoto,
+	setPage,
+	startLoadingPhotosScrolling,
+} from 'actions/photos';
 import { Typography } from 'shared/Typography';
 import { Photo, PhotoContainer, DeleteButton } from './Gallery.elements';
-
-const fakePhotos = [
-	{
-		id: 0,
-		src: 'https://ladefinicion.com/wp-content/uploads/2019/08/paisaje-natural.jpg',
-		label: 'Some label',
-	},
-	{
-		id: 1,
-		src: 'https://concepto.de/wp-content/uploads/2015/03/paisaje-e1549600034372.jpg',
-		label: 'Some label',
-	},
-	{
-		id: 2,
-		src: 'https://www.xtrafondos.com/descargar.php?id=5846&resolucion=2560x1440',
-		label: 'Some label',
-	},
-	{
-		id: 3,
-		src: 'https://ladefinicion.com/wp-content/uploads/2019/08/paisaje-natural.jpg',
-		label: 'Some label',
-	},
-	{
-		id: 4,
-		src: 'https://concepto.de/wp-content/uploads/2015/03/paisaje-e1549600034372.jpg',
-		label: 'Some label',
-	},
-	{
-		id: 5,
-		src: 'https://www.xtrafondos.com/descargar.php?id=5846&resolucion=2560x1440',
-		label: 'Some label',
-	},
-	{
-		id: 6,
-		src: 'https://www.blogartesvisuales.net/wp-content/uploads/2012/04/foto-paisaje-barca.jpg',
-		label: 'Some label',
-	},
-	{
-		id: 7,
-		src: 'https://www.blogartesvisuales.net/wp-content/uploads/2012/04/foto-paisaje-barca.jpg',
-		label: 'Some label',
-	},
-];
+import { Spinner } from 'shared';
 
 const breakpointColumnsObj = {
 	default: 4,
@@ -54,27 +20,69 @@ const breakpointColumnsObj = {
 	500: 1,
 };
 
+let text;
+
 export const Gallery = () => {
-	return (
-		<>
-			{fakePhotos.length === 0 ? (
-				<Typography align="center">
+	const { photos, total, page } = useSelector((state) => state.photos);
+	const { loading_photos } = useSelector((state) => state.ui);
+
+	const dispatch = useDispatch();
+
+	const { width } = useWindowSize();
+
+	useEffect(() => {
+		if (!total) {
+			text = (
+				<>
 					There are no photos yet... <br />
 					Upload one!
-				</Typography>
+				</>
+			);
+		} else {
+			text = <>There are no results for that query.</>;
+		}
+	}, [total]);
+
+	const handleNext = () => {
+		dispatch(setPage(page + 1));
+		dispatch(startLoadingPhotosScrolling());
+	};
+
+	const handleDeletePhoto = (id) => {
+		dispatch(startDeletingPhoto(id));
+	};
+
+	return (
+		<>
+			{loading_photos ? (
+				<Spinner />
+			) : photos.length === 0 ? (
+				<Typography align="center">{text}</Typography>
 			) : (
-				<Masonry
-					breakpointCols={breakpointColumnsObj}
-					className="my-masonry-grid"
-					columnClassName="my-masonry-grid_column"
+				<InfiniteScroll
+					dataLength={total} //This is important field to render the next data
+					next={handleNext}
+					hasMore={photos.length !== total}
+					loader={<Spinner />}
 				>
-					{fakePhotos.map(({ id, src, label }) => (
-						<PhotoContainer key={id} data-label={label}>
-							<DeleteButton>delete</DeleteButton>
-							<Photo src={src} />
-						</PhotoContainer>
-					))}
-				</Masonry>
+					<Masonry
+						breakpointCols={breakpointColumnsObj}
+						className="my-masonry-grid"
+						columnClassName="my-masonry-grid_column"
+					>
+						{photos.map(({ id, photo_url, label }) => (
+							<PhotoContainer key={id} data-label={label}>
+								<DeleteButton
+									onClick={() => handleDeletePhoto(id)}
+									window_width={width}
+								>
+									delete
+								</DeleteButton>
+								<Photo photo_url={photo_url} />
+							</PhotoContainer>
+						))}
+					</Masonry>
+				</InfiniteScroll>
 			)}
 		</>
 	);

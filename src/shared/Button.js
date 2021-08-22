@@ -24,4 +24,5 @@ export const GrayButton = styled.button`
 	border: none;
 	padding: 0.9rem 1.2rem;
 	color: ${({ theme }) => theme.colors.light_gray};
+	cursor: pointer;
 `;

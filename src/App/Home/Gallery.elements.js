@@ -25,7 +25,9 @@ export const PhotoContainer = styled.div`
 `;
 
 export const Photo = styled.img.attrs((props) => ({
-	src: props.src || 'https://bitsofco.de/content/images/2018/12/broken-1.png',
+	src:
+		props.photo_url ||
+		'https://bitsofco.de/content/images/2018/12/broken-1.png',
 	alt: props.alt,
 }))`
 	border-radius: 16px;
@@ -37,9 +39,9 @@ export const Photo = styled.img.attrs((props) => ({
 `;
 
 export const DeleteButton = styled.button`
-	display: none;
+	display: ${({ window_width }) => (window_width < 900 ? 'block' : 'none')};
 	position: absolute;
-	padding: 0.6rem 1.5rem;
+	padding: 0.3rem 1.4rem;
 	font-weight: 400;
 	font-size: ${({ theme }) => theme.fz['200']};
 	top: 5px;
@@ -50,7 +52,7 @@ export const DeleteButton = styled.button`
 	border-radius: 2.375rem;
 	transition: filter 0.3s ease;
 	cursor: pointer;
-	z-index: 9999;
+	z-index: 10;
 
 	&:hover + img,
 	& + img:hover {
