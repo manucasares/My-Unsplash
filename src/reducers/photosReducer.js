@@ -3,6 +3,8 @@ import { types } from 'types/types';
 const initialState = {
 	photos: [],
 	page: 0,
+	total_results: 0,
+	total: 0,
 };
 
 export const photosReducer = (state = initialState, action) => {
