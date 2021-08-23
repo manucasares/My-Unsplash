@@ -60,7 +60,7 @@ export const Gallery = () => {
 				<Typography align="center">{galleryText}</Typography>
 			) : (
 				<InfiniteScroll
-					dataLength={total_results} //This is important field to render the next data
+					dataLength={total_results || 0} //This is important field to render the next data
 					next={handleNext}
 					hasMore={photos.length !== total_results}
 					loader={<Spinner />}
