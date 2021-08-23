@@ -118,6 +118,8 @@ export const startSearchingPhotos = (query) => {
 				},
 			});
 
+			console.log(res);
+
 			// Total fotos
 			dispatch(setTotalPhotos(res.data.total));
 
