@@ -31,6 +31,12 @@ export const photosReducer = (state = initialState, action) => {
 				photos: state.photos.filter((p) => p.id !== action.payload),
 			};
 
+		case types.setTotalPhotoResults:
+			return {
+				...state,
+				total_results: action.payload,
+			};
+
 		case types.setTotalPhotos:
 			return {
 				...state,

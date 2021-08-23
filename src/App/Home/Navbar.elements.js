@@ -15,7 +15,7 @@ export const NavbarEl = styled.section`
 `;
 
 export const Logo = styled.img.attrs(() => ({
-	src: 'images/my_unsplash_logo.svg',
+	src: '/images/my_unsplash_logo.svg',
 	alt: 'my unsplash',
 }))`
 	width: 15rem;

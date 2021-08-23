@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Masonry from 'react-masonry-css';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -20,28 +20,28 @@ const breakpointColumnsObj = {
 	500: 1,
 };
 
-let text;
-
 export const Gallery = () => {
-	const { photos, total, page } = useSelector((state) => state.photos);
+	const { photos, total, total_results, page } = useSelector(
+		(state) => state.photos
+	);
 	const { loading_photos } = useSelector((state) => state.ui);
 
 	const dispatch = useDispatch();
-
 	const { width } = useWindowSize();
+	const [galleryText, setGalleryText] = useState('');
 
 	useEffect(() => {
 		if (!total) {
-			text = (
+			setGalleryText(
 				<>
 					There are no photos yet... <br />
 					Upload one!
 				</>
 			);
 		} else {
-			text = <>There are no results for that query.</>;
+			setGalleryText(<>There are no results for that query.</>);
 		}
-	}, [total]);
+	}, [total_results, total]);
 
 	const handleNext = () => {
 		dispatch(setPage(page + 1));
@@ -57,12 +57,12 @@ export const Gallery = () => {
 			{loading_photos ? (
 				<Spinner />
 			) : photos.length === 0 ? (
-				<Typography align="center">{text}</Typography>
+				<Typography align="center">{galleryText}</Typography>
 			) : (
 				<InfiniteScroll
-					dataLength={total} //This is important field to render the next data
+					dataLength={total_results} //This is important field to render the next data
 					next={handleNext}
-					hasMore={photos.length !== total}
+					hasMore={photos.length !== total_results}
 					loader={<Spinner />}
 				>
 					<Masonry

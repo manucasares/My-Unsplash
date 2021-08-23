@@ -8,7 +8,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL_API;
 export const startLoadingPhotosScrolling = () => {
 	return async (dispatch, getState) => {
 		const { page } = getState().photos;
-		const limit = 5;
+		const limit = 30;
 
 		// Multiplicar la pagina por la cantidad de resultados
 		const skip = page * limit;
@@ -34,7 +34,7 @@ export const startLoadingPhotosScrolling = () => {
 
 export const startUploadingPhoto = (label, photo_url) => {
 	return async (dispatch, getState) => {
-		const { total } = getState().photos;
+		const { total_results, total } = getState().photos;
 
 		const payload = {
 			label,
@@ -53,8 +53,11 @@ export const startUploadingPhoto = (label, photo_url) => {
 				id: toastId,
 			});
 
-			// Aumentar en uno el total
+			// Aumentamos en uno el total
 			dispatch(setTotalPhotos(total + 1));
+
+			// Aumentar en uno el total de resultados
+			dispatch(setTotalPhotoResults(total_results + 1));
 
 			// Subir foto localmente
 			dispatch(addPhoto(res.data));
@@ -71,7 +74,9 @@ export const startUploadingPhoto = (label, photo_url) => {
 };
 
 export const startDeletingPhoto = (id) => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
+		const { total, total_results } = getState().photos;
+
 		// Notificacion de loading
 		const notificationId = toast.loading('Deleting photo...');
 
@@ -80,6 +85,12 @@ export const startDeletingPhoto = (id) => {
 
 			// Eliminamos localmente
 			dispatch(deletePhoto(res.data.id));
+
+			// Aumentamos en uno el total
+			dispatch(setTotalPhotos(total - 1));
+
+			// Restamos uno el total de resultados
+			dispatch(setTotalPhotoResults(total_results - 1));
 
 			// Notificacion success
 			toast.success('Photo deleted successfully!', {
@@ -107,7 +118,13 @@ export const startSearchingPhotos = (query) => {
 				},
 			});
 
+			// Total fotos
 			dispatch(setTotalPhotos(res.data.total));
+
+			// Resultados length
+			dispatch(setTotalPhotoResults(res.data.total_results));
+
+			// Seteamos fotos
 			dispatch(setPhotos(res.data.photos));
 		} catch (error) {
 			console.error(error);
@@ -134,6 +151,11 @@ const addPhoto = (photo) => ({
 
 const setTotalPhotos = (total) => ({
 	type: types.setTotalPhotos,
+	payload: total,
+});
+
+const setTotalPhotoResults = (total) => ({
+	type: types.setTotalPhotoResults,
 	payload: total,
 });
 
